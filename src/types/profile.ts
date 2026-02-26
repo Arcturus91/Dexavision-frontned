@@ -1,4 +1,4 @@
-export type UserRole = "admin" | string;
+export type UserRole = "admin" | string; //avoid magic strings
 
 export type ProfileData = {
   displayName: string;
