@@ -12,19 +12,12 @@ type FirebaseWebConfig = {
 
 function readFirebaseConfig(): FirebaseWebConfig {
   return {
-    apiKey: "AIzaSyAODQJBkOwFGYUZok3T5FR1j8-alvd3AAQ",
-    authDomain: "dexavision-5579d.firebaseapp.com",
-    projectId: "dexavision-5579d",
-    storageBucket: "dexavision-5579d.firebasestorage.app",
-    messagingSenderId: "398918164586",
-    appId: "1:398918164586:web:45169f6c8b7888dc03ea13",
-    // apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? "",
-    // authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? "",
-    // projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? "",
-    // storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? "",
-    // messagingSenderId:
-    //   process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? "",
-    // appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID ?? "",
+    apiKey: process.env.FIREBASE_API_KEY ?? "",
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN ?? "",
+    projectId: process.env.FIREBASE_PROJECT_ID ?? "",
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET ?? "",
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID ?? "",
+    appId: process.env.FIREBASE_APP_ID ?? "",
   };
 }
 
