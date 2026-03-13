@@ -29,6 +29,7 @@ type StatusFilter =
   | "incomplete"
   | "in_review"
   | "approved"
+  | "corrections_requested"
   | "rejected"
   | "all";
 
@@ -48,7 +49,9 @@ function statusChip(status: DoctorProfileStatus) {
     case "in_review":
       return { label: "Pendiente", bg: "#E7F3FF", fg: "#2B7CCB" };
     case "incomplete":
-      return { label: "Corrección necesaria", bg: "#FFF1D6", fg: "#F5A623" };
+      return { label: "Incompleto", bg: "#F5F5F5", fg: "#757575" };
+    case "corrections_requested":
+      return { label: "Corrección solicitada", bg: "#FFF1D6", fg: "#F5A623" };
     case "approved":
       return { label: "Aprobado", bg: "#E6F7EA", fg: "#2E7D32" };
     case "rejected":
@@ -101,9 +104,10 @@ export default function VerificacionesPage() {
   const [counts, setCounts] = useState<{
     in_review: number | null;
     incomplete: number | null;
+    corrections_requested: number | null;
     approved: number | null;
     rejected: number | null;
-  }>({ in_review: null, incomplete: null, approved: null, rejected: null });
+  }>({ in_review: null, incomplete: null, corrections_requested: null, approved: null, rejected: null });
 
   const [filtersAnchor, setFiltersAnchor] = useState<HTMLElement | null>(null);
 
@@ -293,6 +297,7 @@ export default function VerificacionesPage() {
           setCounts({
             in_review: nextCounts.in_review,
             incomplete: nextCounts.incomplete,
+            corrections_requested: nextCounts.corrections_requested ?? 0,
             approved: nextCounts.approved,
             rejected: nextCounts.rejected,
           });
@@ -362,12 +367,12 @@ export default function VerificacionesPage() {
             />
             <StatusStatCard
               title="Requieren corrección"
-              value={counts.incomplete}
+              value={counts.corrections_requested}
               icon="mdi:alert-outline"
               variant="filled"
-              selected={status === "incomplete"}
+              selected={status === "corrections_requested"}
               onClick={() => {
-                setStatus("incomplete");
+                setStatus("corrections_requested");
                 resetPagination();
               }}
             />
@@ -409,7 +414,8 @@ export default function VerificacionesPage() {
             {(
               [
                 ["in_review", "Pendiente"],
-                ["incomplete", "Corrección necesaria"],
+                ["corrections_requested", "Corrección solicitada"],
+                ["incomplete", "Incompleto"],
                 ["approved", "Aprobado"],
                 ["rejected", "Rechazado"],
                 ["all", "Todos"],

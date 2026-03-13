@@ -28,7 +28,7 @@ import type {
   DocumentUrl,
 } from "@/types/doctors";
 
-type Decision = "approve" | "reject";
+type Decision = "approve" | "request_correction" | "reject";
 type DocType =
   | "certificado_profesional"
   | "certificado_superintendencia_salud"
@@ -158,6 +158,13 @@ export default function VerificacionDetallePage() {
 
   async function submitReview() {
     if (!userId) return;
+
+    // Client-side validation: message required for reject and request_correction
+    if ((decision === "reject" || decision === "request_correction") && !message.trim()) {
+      setSubmitError("El motivo es obligatorio para esta acción.");
+      return;
+    }
+
     setSubmitting(true);
     setSubmitError(null);
     setSubmitOk(null);
@@ -182,15 +189,25 @@ export default function VerificacionDetallePage() {
 
       const body = await resp.json().catch(() => null);
       if (!resp.ok) {
-        throw new Error(
-          typeof body === "string" ? body : "No se pudo enviar la decisión.",
-        );
+        // Parse backend error message from JSON response
+        const errorMsg =
+          (body as { error?: { message?: string } })?.error?.message
+          ?? (body as { error?: string })?.error
+          ?? "No se pudo enviar la decisión.";
+        if (resp.status === 409) {
+          throw new Error("El estado del perfil cambió. Recargando...");
+        }
+        throw new Error(typeof errorMsg === "string" ? errorMsg : "No se pudo enviar la decisión.");
       }
 
       setSubmitOk("Decisión enviada correctamente.");
       await fetchDoctor();
     } catch (err) {
       setSubmitError(safeJsonError(err));
+      // Auto-refresh on conflict so admin sees current state
+      if (safeJsonError(err).includes("cambió")) {
+        await fetchDoctor();
+      }
     } finally {
       setSubmitting(false);
     }
@@ -691,6 +708,13 @@ export default function VerificacionDetallePage() {
                   </Stack>
                   <Stack direction="row" spacing={1} alignItems="center">
                     <Radio
+                      checked={decision === "request_correction"}
+                      onChange={() => setDecision("request_correction")}
+                    />
+                    <Typography fontWeight={800}>Solicitar corrección</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Radio
                       checked={decision === "reject"}
                       onChange={() => setDecision("reject")}
                     />
@@ -699,13 +723,19 @@ export default function VerificacionDetallePage() {
                 </Stack>
 
                 <TextField
-                  label="Mensaje"
-                  placeholder="Escribe una nota para el doctor..."
+                  label="Motivo"
+                  placeholder="Especificar motivo"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   multiline
                   minRows={3}
                   fullWidth
+                  required={decision === "reject" || decision === "request_correction"}
+                  helperText={
+                    (decision === "reject" || decision === "request_correction") && !message.trim()
+                      ? "obligatorio"
+                      : undefined
+                  }
                 />
 
                 <Button
