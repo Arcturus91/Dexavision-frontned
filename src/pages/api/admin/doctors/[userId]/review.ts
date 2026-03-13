@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const action = typeof body.action === "string" ? body.action : "";
   const message = typeof body.message === "string" ? body.message : "";
 
-  if (action !== "approve" && action !== "reject") {
+  if (action !== "approve" && action !== "reject" && action !== "request_correction") {
     return res.status(400).json({ error: "Invalid action" });
   }
 

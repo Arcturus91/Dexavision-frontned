@@ -58,6 +58,7 @@ export type DoctorsResponse = {
       incomplete: number;
       in_review: number;
       approved: number;
+      corrections_requested: number;
       rejected: number;
     };
   };
