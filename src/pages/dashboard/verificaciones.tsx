@@ -51,7 +51,7 @@ function statusChip(status: DoctorProfileStatus) {
     case "incomplete":
       return { label: "Incompleto", bg: "#F5F5F5", fg: "#757575" };
     case "corrections_requested":
-      return { label: "Corrección solicitada", bg: "#FFF1D6", fg: "#F5A623" };
+      return { label: "Corrección necesaria", bg: "#FFF1D6", fg: "#F5A623" };
     case "approved":
       return { label: "Aprobado", bg: "#E6F7EA", fg: "#2E7D32" };
     case "rejected":
@@ -414,7 +414,7 @@ export default function VerificacionesPage() {
             {(
               [
                 ["in_review", "Pendiente"],
-                ["corrections_requested", "Corrección solicitada"],
+                ["corrections_requested", "Corrección necesaria"],
                 ["incomplete", "Incompleto"],
                 ["approved", "Aprobado"],
                 ["rejected", "Rechazado"],
