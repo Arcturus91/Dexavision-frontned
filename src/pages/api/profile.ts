@@ -24,7 +24,7 @@ export default async function handler(
 
   let upstream: Response;
   try {
-    upstream = await fetch(`${getServerUrl()}/doctor/profile`, {
+    upstream = await fetch(`${getServerUrl()}/admin/profile`, {
       method: "GET",
       headers: {
         authorization,
