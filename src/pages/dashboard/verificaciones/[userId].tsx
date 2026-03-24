@@ -294,7 +294,7 @@ export default function VerificacionDetallePage() {
                   <Stack spacing={2.5}>
                     <Stack direction="row" spacing={2} alignItems="center">
                       <Avatar
-                        src={doctor.photoURL ?? undefined}
+                        src={doctor.profilePictureUrl ?? doctor.photoURL ?? undefined}
                         sx={{ width: 64, height: 64 }}
                       />
                       <Box sx={{ minWidth: 0 }}>

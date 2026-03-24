@@ -38,6 +38,7 @@ export type DoctorDetail = Doctor & {
   reviewMessage: string;
   reviewedAt: string | null;
   reviewedBy: string;
+  profilePictureUrl?: string | null;
 };
 
 export type DoctorDetailResponse = {
