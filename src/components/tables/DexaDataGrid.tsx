@@ -51,7 +51,8 @@ export function DexaDataGrid<R extends { [key: string]: unknown }>(
     onOpenFilters,
   } = props;
 
-  const serverPagination = typeof rowCount === "number" || Boolean(paginationMeta);
+  const serverPagination =
+    typeof rowCount === "number" || Boolean(paginationMeta);
 
   return (
     <Paper
@@ -92,7 +93,9 @@ export function DexaDataGrid<R extends { [key: string]: unknown }>(
           fullWidth
           InputProps={{
             startAdornment: (
-              <Box sx={{ display: "inline-flex", pr: 1, color: "text.secondary" }}>
+              <Box
+                sx={{ display: "inline-flex", pr: 1, color: "text.secondary" }}
+              >
                 <Icon icon="mdi:magnify" width={20} height={20} />
               </Box>
             ),
@@ -182,4 +185,3 @@ export function DexaDataGrid<R extends { [key: string]: unknown }>(
     </Paper>
   );
 }
-

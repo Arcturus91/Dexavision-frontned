@@ -12,10 +12,7 @@ function readQueryString(q: string | string[] | undefined): string | null {
   return null;
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -23,29 +20,29 @@ export default async function handler(
 
   const authorization = req.headers.authorization;
   if (!authorization || !authorization.toLowerCase().startsWith("bearer ")) {
-    return res
-      .status(401)
-      .json({ error: "Missing Authorization Bearer token" });
+    return res.status(401).json({ error: "Missing Authorization Bearer token" });
   }
 
-  const userId = readQueryString(req.query.userId);
-  if (!userId) return res.status(400).json({ error: "Missing userId" });
+  const role = readQueryString(req.query.role) ?? "all";
+  const limit = readQueryString(req.query.limit) ?? "10";
+  const after = readQueryString(req.query.after);
+  const before = readQueryString(req.query.before);
+
+  const params = new URLSearchParams({ role, limit });
+  if (after) params.set("after", after);
+  if (before) params.set("before", before);
 
   let upstream: Response;
   try {
-    upstream = await fetch(
-      `${getServerUrl()}/admin/users/${encodeURIComponent(userId)}`,
-      {
-        method: "GET",
-        headers: {
-          authorization,
-          accept: "application/json",
-        },
+    upstream = await fetch(`${getServerUrl()}/admin/users?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        authorization,
+        accept: "application/json",
       },
-    );
+    });
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Upstream fetch failed";
+    const message = err instanceof Error ? err.message : "Upstream fetch failed";
     return res.status(502).json({ error: message });
   }
 
@@ -60,3 +57,4 @@ export default async function handler(
   const text = await upstream.text().catch(() => "");
   return res.status(upstream.status).send(text);
 }
+

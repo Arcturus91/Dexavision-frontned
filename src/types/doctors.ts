@@ -1,3 +1,5 @@
+import { UserRole } from "./users";
+
 export type DoctorProfileStatus =
   | "incomplete"
   | "in_review"
@@ -13,6 +15,8 @@ export type Doctor = {
   displayEmail: string;
   professionalName: string;
   profileStatus: DoctorProfileStatus;
+  accountStatus?: string;
+  statusChangeReason?: string | null;
   submittedAt: string | null;
 };
 
@@ -38,6 +42,8 @@ export type DoctorDetail = Doctor & {
   reviewMessage: string;
   reviewedAt: string | null;
   reviewedBy: string;
+  profilePictureUrl?: string | null;
+  role?: UserRole;
 };
 
 export type DoctorDetailResponse = {
@@ -63,4 +69,3 @@ export type DoctorsResponse = {
     };
   };
 };
-

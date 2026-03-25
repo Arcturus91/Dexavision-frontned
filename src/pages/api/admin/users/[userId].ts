@@ -16,8 +16,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method !== "GET") {
-    res.setHeader("Allow", "GET");
+  if (req.method !== "GET" && req.method !== "DELETE") {
+    res.setHeader("Allow", "GET, DELETE");
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
@@ -36,7 +36,7 @@ export default async function handler(
     upstream = await fetch(
       `${getServerUrl()}/admin/users/${encodeURIComponent(userId)}`,
       {
-        method: "GET",
+        method: req.method,
         headers: {
           authorization,
           accept: "application/json",

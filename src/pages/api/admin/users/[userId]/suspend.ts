@@ -12,40 +12,44 @@ function readQueryString(q: string | string[] | undefined): string | null {
   return null;
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  if (req.method !== "GET") {
-    res.setHeader("Allow", "GET");
+function readReason(body: unknown): string {
+  if (!body || typeof body !== "object") return "";
+  const b = body as Record<string, unknown>;
+  return typeof b.reason === "string" ? b.reason : "";
+}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "PATCH") {
+    res.setHeader("Allow", "PATCH");
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
   const authorization = req.headers.authorization;
   if (!authorization || !authorization.toLowerCase().startsWith("bearer ")) {
-    return res
-      .status(401)
-      .json({ error: "Missing Authorization Bearer token" });
+    return res.status(401).json({ error: "Missing Authorization Bearer token" });
   }
 
   const userId = readQueryString(req.query.userId);
   if (!userId) return res.status(400).json({ error: "Missing userId" });
 
+  const reason = readReason(req.body);
+
   let upstream: Response;
   try {
     upstream = await fetch(
-      `${getServerUrl()}/admin/users/${encodeURIComponent(userId)}`,
+      `${getServerUrl()}/admin/users/${encodeURIComponent(userId)}/suspend`,
       {
-        method: "GET",
+        method: "PATCH",
         headers: {
           authorization,
           accept: "application/json",
+          "content-type": "application/json",
         },
+        body: JSON.stringify({ reason }),
       },
     );
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Upstream fetch failed";
+    const message = err instanceof Error ? err.message : "Upstream fetch failed";
     return res.status(502).json({ error: message });
   }
 
@@ -60,3 +64,4 @@ export default async function handler(
   const text = await upstream.text().catch(() => "");
   return res.status(upstream.status).send(text);
 }
+

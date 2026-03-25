@@ -81,7 +81,11 @@ export default function VerificacionDetallePage() {
     typeof router.query.userId === "string" ? router.query.userId : "";
   const { getIdToken } = useAuth();
 
-  const [tab, setTab] = useState<"perfil" | "documentos">("perfil");
+  const initialTab =
+    typeof router.query.tab === "string" && router.query.tab === "documentos"
+      ? "documentos"
+      : "perfil";
+  const [tab, setTab] = useState<"perfil" | "documentos">(initialTab);
   const [doctor, setDoctor] = useState<DoctorDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -160,7 +164,10 @@ export default function VerificacionDetallePage() {
     if (!userId) return;
 
     // Client-side validation: message required for reject and request_correction
-    if ((decision === "reject" || decision === "request_correction") && !message.trim()) {
+    if (
+      (decision === "reject" || decision === "request_correction") &&
+      !message.trim()
+    ) {
       setSubmitError("El motivo es obligatorio para esta acción.");
       return;
     }
@@ -191,13 +198,17 @@ export default function VerificacionDetallePage() {
       if (!resp.ok) {
         // Parse backend error message from JSON response
         const errorMsg =
-          (body as { error?: { message?: string } })?.error?.message
-          ?? (body as { error?: string })?.error
-          ?? "No se pudo enviar la decisión.";
+          (body as { error?: { message?: string } })?.error?.message ??
+          (body as { error?: string })?.error ??
+          "No se pudo enviar la decisión.";
         if (resp.status === 409) {
           throw new Error("El estado del perfil cambió. Recargando...");
         }
-        throw new Error(typeof errorMsg === "string" ? errorMsg : "No se pudo enviar la decisión.");
+        throw new Error(
+          typeof errorMsg === "string"
+            ? errorMsg
+            : "No se pudo enviar la decisión.",
+        );
       }
 
       setSubmitOk("Decisión enviada correctamente.");
@@ -294,7 +305,11 @@ export default function VerificacionDetallePage() {
                   <Stack spacing={2.5}>
                     <Stack direction="row" spacing={2} alignItems="center">
                       <Avatar
-                        src={doctor.photoURL ?? undefined}
+                        src={
+                          doctor.profilePictureUrl ??
+                          doctor.photoURL ??
+                          undefined
+                        }
                         sx={{ width: 64, height: 64 }}
                       />
                       <Box sx={{ minWidth: 0 }}>
@@ -711,7 +726,9 @@ export default function VerificacionDetallePage() {
                       checked={decision === "request_correction"}
                       onChange={() => setDecision("request_correction")}
                     />
-                    <Typography fontWeight={800}>Solicitar corrección</Typography>
+                    <Typography fontWeight={800}>
+                      Solicitar corrección
+                    </Typography>
                   </Stack>
                   <Stack direction="row" spacing={1} alignItems="center">
                     <Radio
@@ -730,9 +747,13 @@ export default function VerificacionDetallePage() {
                   multiline
                   minRows={3}
                   fullWidth
-                  required={decision === "reject" || decision === "request_correction"}
+                  required={
+                    decision === "reject" || decision === "request_correction"
+                  }
                   helperText={
-                    (decision === "reject" || decision === "request_correction") && !message.trim()
+                    (decision === "reject" ||
+                      decision === "request_correction") &&
+                    !message.trim()
                       ? "obligatorio"
                       : undefined
                   }

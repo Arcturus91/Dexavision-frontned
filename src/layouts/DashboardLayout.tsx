@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useMemo, useState } from "react";
+import React, { Fragment, useMemo, useState } from "react";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/contexts/ProfileContext";
@@ -96,43 +96,45 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             (item.href !== "/dashboard" && currentPath.startsWith(item.href));
 
           return (
-            <ListItemButton
-              key={item.href}
-              component={Link}
-              href={item.href}
-              selected={selected}
-              onClick={() => setMobileOpen(false)}
-              sx={{
-                mb: 0.75,
-                borderRadius: 2,
-                px: 2,
-                py: 1.1,
-                "&.Mui-selected": {
-                  background:
-                    "linear-gradient(180deg, #2B7CCB 0%, #1B5EA7 100%)",
-                  color: "#fff",
-                },
-                "&.Mui-selected:hover": {
-                  background:
-                    "linear-gradient(180deg, #2B7CCB 0%, #184F8C 100%)",
-                },
-              }}
-            >
-              <ListItemIcon
+            <Fragment key={item.href}>
+              {item.label === "Ajustes" && <Divider sx={{ mb: 1 }} />}
+              <ListItemButton
+                component={Link}
+                href={item.href}
+                selected={selected}
+                onClick={() => setMobileOpen(false)}
                 sx={{
-                  minWidth: 40,
-                  color: selected ? "#fff" : "text.secondary",
+                  mb: 0.75,
+                  borderRadius: 2,
+                  px: 2,
+                  py: 1.1,
+                  "&.Mui-selected": {
+                    background:
+                      "linear-gradient(180deg, #2B7CCB 0%, #1B5EA7 100%)",
+                    color: "#fff",
+                  },
+                  "&.Mui-selected:hover": {
+                    background:
+                      "linear-gradient(180deg, #2B7CCB 0%, #184F8C 100%)",
+                  },
                 }}
               >
-                <Icon icon={item.icon} width={20} height={20} />
-              </ListItemIcon>
-              <ListItemText
-                primary={item.label}
-                primaryTypographyProps={{
-                  fontWeight: selected ? 900 : 700,
-                }}
-              />
-            </ListItemButton>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 40,
+                    color: selected ? "#fff" : "text.secondary",
+                  }}
+                >
+                  <Icon icon={item.icon} width={20} height={20} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
+                    fontWeight: selected ? 900 : 700,
+                  }}
+                />
+              </ListItemButton>
+            </Fragment>
           );
         })}
       </List>
