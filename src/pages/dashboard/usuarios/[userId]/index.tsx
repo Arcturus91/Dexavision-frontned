@@ -887,7 +887,7 @@ export default function UsuarioDetallePage() {
                     display: "grid",
                     gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
                     gap: 2,
-                    mt: 2,
+                    my: 2,
                   }}
                 >
                   <Paper
@@ -998,6 +998,26 @@ export default function UsuarioDetallePage() {
                     </Box>
                   </Paper>
                 </Box>
+                <Button
+                  component={Link}
+                  href={`/dashboard/usuarios/${encodeURIComponent(userId)}/analisis`}
+                  variant="contained"
+                  sx={{
+                    textTransform: "none",
+                    fontWeight: 900,
+                    py: 1.1,
+                    background:
+                      "linear-gradient(180deg, #2B7CCB 0%, #1B5EA7 100%)",
+                    boxShadow: "none",
+                    "&:hover": {
+                      boxShadow: "none",
+                      background:
+                        "linear-gradient(180deg, #2B7CCB 0%, #184F8C 100%)",
+                    },
+                  }}
+                >
+                  Ver Historial de Análisis
+                </Button>
               </Box>
             </Paper>
           ) : null}
