@@ -44,6 +44,9 @@ export type DoctorDetail = Doctor & {
   reviewedBy: string;
   profilePictureUrl?: string | null;
   role?: UserRole;
+  // Código de Registro de Superintendencia (RNPI). Admin operator copy-pastes
+  // this value into https://rnpi.superdesalud.gob.cl/# to verify manually.
+  numRegSuperintendencia?: string | null;
 };
 
 export type DoctorDetailResponse = {

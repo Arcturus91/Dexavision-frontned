@@ -384,6 +384,47 @@ export default function VerificacionDetallePage() {
                                 border: "1px solid rgba(15, 23, 42, 0.08)",
                               }}
                             >
+                              <Icon icon="mdi:certificate-outline" />
+                            </Box>
+                            <Box>
+                              <Typography variant="body2" fontWeight={900}>
+                                Código de registro de superintendencia
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
+                                {doctor.numRegSuperintendencia || "—"}
+                              </Typography>
+                            </Box>
+                          </Stack>
+                        </Paper>
+
+                        <Paper
+                          variant="outlined"
+                          sx={{
+                            borderRadius: 2.5,
+                            p: 1.5,
+                            bgcolor: "#F3F8FB",
+                            borderColor: "rgba(15, 23, 42, 0.06)",
+                          }}
+                        >
+                          <Stack
+                            direction="row"
+                            spacing={1.25}
+                            alignItems="center"
+                          >
+                            <Box
+                              sx={{
+                                width: 34,
+                                height: 34,
+                                borderRadius: 2,
+                                bgcolor: "#fff",
+                                display: "grid",
+                                placeItems: "center",
+                                border: "1px solid rgba(15, 23, 42, 0.08)",
+                              }}
+                            >
                               <Icon icon="mdi:map-marker" />
                             </Box>
                             <Box>
