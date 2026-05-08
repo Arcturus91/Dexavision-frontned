@@ -15,6 +15,7 @@ import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { AdminGuard } from "@/components/AdminGuard";
+import { DashboardActivityStripCard } from "@/components/dashboard/DashboardActivityStripCard";
 import { DashboardKpiCard } from "@/components/dashboard/DashboardKpiCard";
 import { UserGrowthChart } from "@/components/dashboard/UserGrowthChart";
 import { useAuth } from "@/contexts/AuthContext";
@@ -168,32 +169,60 @@ export default function DashboardPage() {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "repeat(2, 1fr)",
-                lg: "repeat(3, 1fr)",
-              },
-              gap: 2,
+              gridTemplateColumns: { xs: "1fr", md: "minmax(0, 1fr) 280px" },
+              gap: 2.5,
+              alignItems: "start",
             }}
           >
-            <DashboardKpiCard
-              title="Usuarios Activos"
-              value={data?.cards.activeUsers ?? null}
-              icon="mdi:users"
-              variant="filled"
-            />
-            <DashboardKpiCard
-              title="Profesionales Activos Registrados"
-              value={data?.cards.activeDoctors ?? null}
-              icon="healthicons:health-alt"
-              variant="filled"
-            />
-            <DashboardKpiCard
-              title="Verificaciones Pendientes"
-              value={data?.cards.pendingVerifications ?? null}
-              icon="fluent:shield-task-28-filled"
-              variant="outlined"
-            />
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  sm: "repeat(2, 1fr)",
+                  lg: "repeat(3, 1fr)",
+                },
+                gap: 2,
+              }}
+            >
+              <DashboardKpiCard
+                title="Usuarios Activos"
+                value={data?.cards.activeUsers ?? null}
+                icon="mdi:users"
+                variant="filled"
+              />
+              <DashboardKpiCard
+                title="Profesionales Activos Registrados"
+                value={data?.cards.activeDoctors ?? null}
+                icon="healthicons:health-alt"
+                variant="filled"
+              />
+              <DashboardKpiCard
+                title="Verificaciones Pendientes"
+                value={data?.cards.pendingVerifications ?? null}
+                icon="fluent:shield-task-28-filled"
+                variant="outlined"
+              />
+            </Box>
+
+            <Stack
+              spacing={1}
+              sx={{
+                height: { md: 140 },
+                "& > *": { flex: 1, minHeight: 0 },
+              }}
+            >
+              <DashboardActivityStripCard
+                title="Escaneos realizados"
+                value={data?.cards.scansTotal ?? null}
+                icon="mdi:image-search-outline"
+              />
+              <DashboardActivityStripCard
+                title="Matches paciente↔doctor"
+                value={data?.cards.matchesTotal ?? null}
+                icon="mdi:handshake-outline"
+              />
+            </Stack>
           </Box>
 
           <Box

@@ -17,6 +17,8 @@ export type DashboardStatsResponse = {
       activeUsers: number;
       activeDoctors: number;
       pendingVerifications: number;
+      scansTotal: number;
+      matchesTotal: number;
     };
     userCounts: {
       total: number;
